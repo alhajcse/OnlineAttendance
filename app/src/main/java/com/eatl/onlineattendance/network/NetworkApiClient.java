@@ -39,15 +39,7 @@ public class NetworkApiClient {
                             .method(original.method(), original.body())
                             .build();
 
-
-                    // long t1 = System.nanoTime();
-                    Log.d("Log", String.format("Sending request %s on %s%n%s", request.url(), chain.connection(), request.headers()).toString());
-
                     Response response = chain.proceed(request);
-
-                    // long t2 = System.nanoTime();
-                     Log.e("Log", ""+response.request().url());
-
                     return response;
                 }
             });
@@ -65,25 +57,6 @@ public class NetworkApiClient {
                     .setLenient()
                     .create();
 
-//            okHttpClient.interceptors().add(new Interceptor() {
-//                @Override
-//                public ResponseStatus intercept(Chain chain) throws IOException {
-//
-//                    Request request = chain.request();
-//
-//                    long t1 = System.nanoTime();
-//                    Log.e("Log", String.format("Sending request %s on %s%n%s", request.url(), chain.connection(),
-//                                    request.headers()).toString());
-//
-//                    ResponseStatus response = chain.proceed(request);
-//
-//                    long t2 = System.nanoTime();
-//                    Log.e("Log", String.format("Received response for %s in %.1fms%n%s", response.request().url(),
-//                                    (t2 - t1) / 1e6d, response.headers()).toString());
-//
-//                    return response;
-//                }
-//            });
 
             retrofit= new Retrofit.Builder()
                     .baseUrl(baseUrl)

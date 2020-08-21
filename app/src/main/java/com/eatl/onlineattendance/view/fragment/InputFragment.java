@@ -1,5 +1,9 @@
 package com.eatl.onlineattendance.view.fragment;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -7,18 +11,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
-import androidx.navigation.Navigation;
 
 import com.eatl.onlineattendance.R;
 import com.eatl.onlineattendance.databinding.NavigationInputFragmentBinding;
@@ -34,12 +36,14 @@ import java.util.Random;
 public class InputFragment extends Fragment {
 
 
+    private static final int REQUEST_LOCATION_CODE = 200;
+    private static final int READ_REQUEST_CODE = 300;
     NavigationInputFragmentBinding binding;
     String latStr,longStr,userName,userID;
-
     InputViewModel inputViewModel;
-
     GPSTracker gpsTracker;
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,9 +61,26 @@ public class InputFragment extends Fragment {
         inputViewModel = ViewModelProviders.of(this).get(InputViewModel.class);
 
 
-        getLocation();
+
+        int permissionCheck = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+
+            Log.e("man","vs1");
+
+
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, READ_REQUEST_CODE);
+
+        }else{
+
+
+            getLocation();
+
+
+        }
+
+
+
         getAlphaNumericString();
-       // test();
 
         binding.useridInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -125,10 +146,24 @@ public class InputFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                getLocation();
+                int permissionCheck = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION);
+                if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, READ_REQUEST_CODE);
+
+                }else{
+
+                    gpsTracker=new GPSTracker(getActivity());
+                    getLocation();
+
+
+                }
                 String req_id= getAlphaNumericString();
 
                 if(validateName(userName) && validateUID(userID) && validateLatitude(latStr) && validateLongitude(longStr)) {
+
+                    Log.e("testTtt",""+longStr);
+                    Log.e("testTtt",""+latStr);
 
                     sendOnlineAttandace(userName, userID, latStr, longStr, req_id);
 
@@ -147,30 +182,23 @@ public class InputFragment extends Fragment {
 
     public void getLocation(){
 
-        // String location="";
-
         try {
             double latitude = gpsTracker.getLatitude();
             double longitude = gpsTracker.getLongitude();
 
             latStr=String.valueOf(latitude);
             longStr=String.valueOf(longitude);
-            //return location;
 
         } catch (Exception e) {
 
             e.printStackTrace();
         }
 
-        // return location;
-
     }
 
 
+    //generate unique number
     Random random = new Random(System.currentTimeMillis());
-
-
-
     public String getAlphaNumericString() {
 
             String n = BigInteger.valueOf(Math.abs(random.nextLong())).toString(32).toUpperCase();
@@ -178,9 +206,6 @@ public class InputFragment extends Fragment {
                 if (n.length() > 10) {
                     n = n.substring(n.length() - 10);
                 }
-                System.out.println(n);
-                Log.e("unic",""+n);
-
             }
 
             return n;
@@ -245,7 +270,7 @@ public class InputFragment extends Fragment {
 
 
     private boolean validateLatitude(String lat) {
-        if(lat == null || lat.trim().length()<=0)
+        if(lat == null||lat.contains("0.0"))
         {
             Toast.makeText(getActivity(),"Given user Location.", Toast.LENGTH_SHORT).show();
             return false;
@@ -255,7 +280,7 @@ public class InputFragment extends Fragment {
     }
 
     private boolean validateLongitude(String lon) {
-        if(lon == null || lon.trim().length()<=0)
+        if(lon == null||lon.contains("0.0"))
         {
             Toast.makeText(getActivity(),"Given user Location.", Toast.LENGTH_SHORT).show();
             return false;
@@ -263,6 +288,10 @@ public class InputFragment extends Fragment {
 
         return true;
     }
+
+
+
+
 
 
 

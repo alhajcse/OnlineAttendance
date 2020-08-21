@@ -60,17 +60,8 @@ public class InputViewModel extends AndroidViewModel {
 
 
                 AttendanceModel attendanceModel=response.body();
-
-
-
-                Log.e("json tutor", "error --> ");
-
                 if(attendanceModel!=null) {
-
-
                     listMutableLiveData.setValue(attendanceModel);
-
-
                 }
 
                 isLoading.postValue(false);
@@ -82,8 +73,6 @@ public class InputViewModel extends AndroidViewModel {
             public void onFailure(Call<AttendanceModel> call, Throwable t) {
 
                 isLoading.postValue(false);
-
-                Log.e("json tutor", "error --> " + t.getMessage());
             }
         });
 

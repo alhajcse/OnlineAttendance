@@ -18,8 +18,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.eatl.onlineattendance.R;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -59,7 +57,6 @@ public class GPSTracker extends Service implements LocationListener {
 
             if (!isGPSEnabled && !isNetworkEnabled) {
 
-                Log.e("ssa", "showSettingsAlert() is calling");
                 showSettingsAlert();
 
             } else {
@@ -193,9 +190,6 @@ public class GPSTracker extends Service implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
 
-        double lat = location.getLatitude();
-        double longi = location.getLongitude();
-//        Toast.makeText(getApplicationContext(), "My Location is \n" + lat + "\n" + longi, Toast.LENGTH_SHORT);
         getLocation();
 
     }
