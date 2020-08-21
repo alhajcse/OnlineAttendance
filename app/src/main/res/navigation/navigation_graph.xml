@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.eatl.onlineattendance.view.fragment.HomeFragment"
+        android:label="navigation_home_fragment"
+        tools:layout="@layout/navigation_home_fragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_inputeFragment"
+            app:destination="@id/inputeFragment"
+            app:enterAnim="@anim/nav_default_enter_anim" >
+
+        </action>
+
+        <argument
+            android:name="message"
+            android:defaultValue="hello world"
+            app:argType="string" />
+
+
+    </fragment>
+    <fragment
+        android:id="@+id/inputeFragment"
+        android:name="com.eatl.onlineattendance.view.fragment.InputFragment"
+        android:label="navigation_input_fragment"
+        tools:layout="@layout/navigation_input_fragment" >
+
+        <argument
+            android:name="item"
+            app:argType="com.eatl.onlineattendance.model.Datum"/>
+
+    </fragment>
+</navigation>
