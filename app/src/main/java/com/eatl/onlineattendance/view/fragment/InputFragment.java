@@ -36,7 +36,6 @@ import java.util.Random;
 public class InputFragment extends Fragment {
 
 
-    private static final int REQUEST_LOCATION_CODE = 200;
     private static final int READ_REQUEST_CODE = 300;
     NavigationInputFragmentBinding binding;
     String latStr,longStr,userName,userID;
@@ -64,8 +63,6 @@ public class InputFragment extends Fragment {
 
         int permissionCheck = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-
-            Log.e("man","vs1");
 
 
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, READ_REQUEST_CODE);
@@ -119,12 +116,10 @@ public class InputFragment extends Fragment {
             }
         });
 
-        Log.e("latt",""+latStr);
-        Log.e("long",""+longStr);
+
 
         Datum datum = InputFragmentArgs.fromBundle(getArguments()).getItem();
 
-        Toast.makeText(getActivity(), "The item id is " + datum.getId(), Toast.LENGTH_LONG).show();
 
 
 
@@ -161,9 +156,6 @@ public class InputFragment extends Fragment {
                 String req_id= getAlphaNumericString();
 
                 if(validateName(userName) && validateUID(userID) && validateLatitude(latStr) && validateLongitude(longStr)) {
-
-                    Log.e("testTtt",""+longStr);
-                    Log.e("testTtt",""+latStr);
 
                     sendOnlineAttandace(userName, userID, latStr, longStr, req_id);
 

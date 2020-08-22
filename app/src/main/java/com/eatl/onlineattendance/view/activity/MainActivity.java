@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.eatl.onlineattendance.R;
+import com.eatl.onlineattendance.di.App;
 import com.eatl.onlineattendance.utility.GPSTracker;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ((App) getApplication()).getComponent().inject(this);
 
 
         if (ContextCompat.checkSelfPermission(MainActivity.this,
